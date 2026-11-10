@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>My Dashboard</title>
+  <style>
+    /* The page color comes from this one setting. JavaScript changes it for you. */
+    :root { --accent: #2a9d8f; }
+
+    body {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      background: #faf9f7;
+      color: #222;
+      padding: 32px 20px;
+    }
+    main { max-width: 640px; margin: 0 auto; }
+
+    h1 {
+      font-size: 2.6rem;
+      margin: 0 0 4px;
+      color: var(--accent);
+    }
+    .subtitle { margin: 0 0 32px; color: #666; }
+
+    .cards { display: grid; gap: 16px; }
+    .card {
+      background: #fff;
+      border: 1px solid #e6e3de;
+      border-left: 8px solid var(--accent);
+      border-radius: 6px;
+      padding: 20px 24px;
+    }
+    .label { margin: 0 0 6px; color: #777; font-size: 0.95rem; }
+    .value { margin: 0; font-size: 1.8rem; }
+
+    .swatch {
+      display: inline-block;
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      background: var(--accent);
+      vertical-align: middle;
+      margin-right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1 id="title"></h1>
+    <p class="subtitle">My personal dashboard</p>
+
+    <div class="cards">
+      <div class="card">
+        <p class="label">Name</p>
+        <p class="value" id="name"></p>
+      </div>
+
+      <div class="card">
+        <p class="label">Birthday</p>
+        <p class="value" id="birthday"></p>
+      </div>
+
+      <div class="card">
+        <p class="label">Next birthday</p>
+        <p class="value" id="countdown"></p>
+      </div>
+
+      <div class="card">
+        <p class="label">Favorite color</p>
+        <p class="value"><span class="swatch"></span><span id="colorName"></span></p>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // ===== CHANGE THESE THREE LINES TO YOUR OWN INFO =====
+    const myName = "Your Name";
+    const myBirthday = "2000-01-31";       // format: year-month-day
+    const myColorName = "Teal";            // any word you like
+    const myColorHex = "#2a9d8f";          // the color code that goes with it
+    // =====================================================
+
+    // Put the name and color on the page
+    document.getElementById("title").textContent = "Hi, " + myName;
+    document.getElementById("name").textContent = myName;
+    document.getElementById("colorName").textContent = myColorName;
+    document.documentElement.style.setProperty("--accent", myColorHex);
+
+    // Show the birthday in a friendly format
+    const birth = new Date(myBirthday + "T00:00:00");
+    document.getElementById("birthday").textContent = birth.toLocaleDateString("en-US", {
+      year: "numeric", month: "long", day: "numeric"
+    });
+
+    // Work out how many days until the next birthday
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    let next = new Date(today.getFullYear(), birth.getMonth(), birth.getDate());
+    if (next < today) {
+      next = new Date(today.getFullYear() + 1, birth.getMonth(), birth.getDate());
+    }
+    const days = Math.round((next - today) / 86400000);
+    const turning = next.getFullYear() - birth.getFullYear();
+
+    document.getElementById("countdown").textContent =
+      days === 0 ? "Today! Happy birthday!" : days + " days (turning " + turning + ")";
+  </script>
+</body>
+</html>
